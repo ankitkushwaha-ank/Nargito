@@ -135,7 +135,15 @@ export async function getFile(stored: string): Promise<Buffer | null> {
     }
     const abs = path.resolve(UPLOAD_ROOT, stored);
     if (!abs.startsWith(UPLOAD_ROOT)) return null;
-    return await fs.readFile(abs);
+    try { return await fs.readFile(abs); } catch (e) {
+      // Demo media rows point at art/<file>. If the copy in UPLOAD_DIR is missing, use the bundled demo image.
+      if (!stored.startsWith("art/")) throw e;
+      const name = path.basename(stored);
+      for (const d of ["art", "images"]) {
+        try { return await fs.readFile(path.resolve("public", d, name)); } catch { /* try next */ }
+      }
+      throw e;
+    }
   } catch { return null; }
 }
 
