@@ -21,7 +21,7 @@
     "icons": "tsx scripts/make-icons.ts"
   },
   "dependencies": {
-    "tsx": "4.23.15",
+    "@aws-sdk/client-s3": "3.1152.0",
     "@electric-sql/pglite": "0.5.10",
     "@fontsource/noto-sans-devanagari": "5.3.0",
     "@fontsource/plus-jakarta-sans": "5.3.0",
@@ -37,6 +37,7 @@
     "server-only": "0.0.1",
     "sharp": "0.35.5",
     "tailwind-merge": "3.7.0",
+    "tsx": "4.23.15",
     "zod": "4.6.7"
   },
   "devDependencies": {

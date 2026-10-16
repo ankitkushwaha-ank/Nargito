@@ -1,6 +1,4 @@
 import "server-only";
-import path from "node:path";
-import { promises as fs } from "node:fs";
 import { randomUUID } from "node:crypto";
 import { and, eq, gte, sql } from "drizzle-orm";
 import sharp from "sharp";
@@ -9,7 +7,9 @@ import { getSettings } from "./settings";
 import { AppError } from "./util";
 import { logSystem } from "./log";
 
-export const UPLOAD_ROOT = path.resolve(process.env.UPLOAD_DIR ?? ".data/uploads");
+import { putFile, getFile, removeFile, publicFileUrl, UPLOAD_ROOT } from "./storage";
+
+export { UPLOAD_ROOT };
 
 type Sniffed = { mime: string; ext: string; kind: "image" | "video" | "document" } | null;
 
@@ -54,8 +54,7 @@ export async function saveUpload(
 
   const id = randomUUID();
   const now = new Date();
-  const dir = path.join(UPLOAD_ROOT, String(now.getUTCFullYear()), String(now.getUTCMonth() + 1).padStart(2, "0"));
-  await fs.mkdir(dir, { recursive: true });
+  const ym = `${now.getUTCFullYear()}/${String(now.getUTCMonth() + 1).padStart(2, "0")}`;
   let out = buf;
   let ext = t.ext;
   let width: number | null = null;
@@ -79,16 +78,18 @@ export async function saveUpload(
       }
       if (s["upload.thumbnails"]) {
         const thumb = await sharp(buf).rotate().resize({ width: 480, withoutEnlargement: true }).webp({ quality: 78 }).toBuffer();
-        thumbRel = path.join(String(now.getUTCFullYear()), String(now.getUTCMonth() + 1).padStart(2, "0"), `${id}.thumb.webp`);
-        await fs.writeFile(path.join(UPLOAD_ROOT, thumbRel), thumb);
+        thumbRel = await putFile(`${ym}/${id}.thumb.webp`, thumb, "image/webp");
       }
     } catch (e) {
       await logSystem("error", "storage", "saveUpload", "Image processing failed", { error: e instanceof Error ? e.message : "unknown" });
       throw new AppError(422, "That image could not be processed.");
     }
   }
-  const rel = path.join(String(now.getUTCFullYear()), String(now.getUTCMonth() + 1).padStart(2, "0"), `${id}.${ext}`);
-  await fs.writeFile(path.join(UPLOAD_ROOT, rel), out);
+  let rel: string;
+  try { rel = await putFile(`${ym}/${id}.${ext}`, out, t.mime); } catch (e) {
+    await logSystem("error", "storage", "saveUpload", "Storage write failed", { error: e instanceof Error ? e.message : "unknown" });
+    throw new AppError(502, "The file could not be saved to storage. Please try again later.");
+  }
   await db.insert(schema.media).values({
     id, ownerId: userId, kind: t.kind, mime: t.mime, size: out.length, path: rel, thumbPath: thumbRel, width, height,
     alt: opts.alt?.slice(0, 300) ?? null, isPrivate: !!opts.isPrivate,
@@ -101,14 +102,13 @@ export async function readMedia(id: string, thumb: boolean) {
   const [m] = await db.select().from(schema.media).where(eq(schema.media.id, id)).limit(1);
   if (!m) return null;
   const rel = thumb && m.thumbPath ? m.thumbPath : m.path;
-  const abs = path.resolve(UPLOAD_ROOT, rel);
-  if (!abs.startsWith(UPLOAD_ROOT)) return null; // path traversal guard
-  try {
-    const data = await fs.readFile(abs);
-    return { m, data, mime: thumb && m.thumbPath ? "image/webp" : m.mime };
-  } catch {
-    return null;
+  if (!m.isPrivate) {
+    const redirect = await publicFileUrl(rel);
+    if (redirect) return { m, data: null, mime: m.mime, redirect };
   }
+  const data = await getFile(rel);
+  if (!data) return null;
+  return { m, data, mime: thumb && m.thumbPath ? "image/webp" : m.mime, redirect: null as string | null };
 }
 
 export async function deleteMediaFiles(ids: string[]) {
@@ -116,7 +116,7 @@ export async function deleteMediaFiles(ids: string[]) {
   for (const id of ids) {
     const [m] = await db.select().from(schema.media).where(eq(schema.media.id, id)).limit(1);
     if (!m) continue;
-    for (const rel of [m.path, m.thumbPath]) if (rel) await fs.rm(path.join(UPLOAD_ROOT, rel), { force: true });
+    for (const rel of [m.path, m.thumbPath]) if (rel) await removeFile(rel);
     await db.delete(schema.media).where(eq(schema.media.id, id));
   }
 }

@@ -4,7 +4,7 @@ import path from "node:path";
 import { and, eq, lt, sql, isNotNull } from "drizzle-orm";
 import { useDb, schema } from "../db";
 import { getSetting } from "../settings";
-import { UPLOAD_ROOT } from "../media";
+import { UPLOAD_ROOT } from "../storage";
 
 export type JobResult = { summary: string };
 const days = (n: number) => new Date(Date.now() - n * 86400_000);
@@ -75,7 +75,7 @@ export const HANDLERS: Record<string, () => Promise<JobResult>> = {
     const db = await useDb();
     const rows = await db.select({ id: schema.media.id, p: schema.media.path }).from(schema.media).limit(5000);
     let missing = 0;
-    for (const r of rows) { try { await fs.access(path.join(UPLOAD_ROOT, r.p)); } catch { missing++; } }
+    for (const r of rows) { if (r.p.startsWith("r2:")) continue; try { await fs.access(path.join(UPLOAD_ROOT, r.p)); } catch { missing++; } }
     return { summary: `${missing} of ${rows.length} media rows reference a missing file.` };
   },
 };

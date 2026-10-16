@@ -18,6 +18,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     const allowed = u && (u.id === r.m.ownerId || (await hasPermission(u, "verification.manage")));
     if (!allowed) return new NextResponse("Not found", { status: 404 });
   }
+  if (r.redirect || !r.data) return NextResponse.redirect(r.redirect!, 302);
   const isDoc = r.m.kind === "document";
   return new NextResponse(new Uint8Array(r.data), {
     headers: {

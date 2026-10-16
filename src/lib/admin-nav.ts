@@ -48,6 +48,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
     { label: "Manage features", href: "/admin/features", perm: "features.manage" },
     { label: "Languages", href: "/admin/languages", perm: "languages.manage" },
     { label: "File uploads", href: "/admin/settings/uploads", perm: "settings.uploads" },
+    { label: "Media storage (R2)", href: "/admin/storage", perm: "settings.uploads" },
     { label: "Social login", href: "/admin/settings/social", perm: "settings.integrations" },
     { label: "AI", href: "/admin/settings/ai", perm: "settings.integrations", feature: "ai" },
     { label: "PWA", href: "/admin/settings/pwa", perm: "settings.pwa" },

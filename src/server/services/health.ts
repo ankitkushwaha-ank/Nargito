@@ -3,7 +3,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { desc, sql } from "drizzle-orm";
 import { useDb, schema, rowsOf } from "../db";
-import { UPLOAD_ROOT } from "../media";
+import { UPLOAD_ROOT, getStorageConfig, testStorage } from "../storage";
 import { mailConfigStatus } from "../mail";
 import { paymentsStatus } from "./pro";
 import { providerCredentials } from "../auth/oauth";
@@ -25,11 +25,11 @@ export async function runHealthChecks(): Promise<{ checks: Check[]; recentErrors
   } catch { checks.push({ key: "migrations", label: "Migration status", status: "unavailable", detail: "Migration journal or table could not be read." }); }
 
   try {
-    const probe = path.join(UPLOAD_ROOT, `.health-${process.pid}`);
-    await fs.mkdir(UPLOAD_ROOT, { recursive: true });
-    t0 = Date.now(); await fs.writeFile(probe, "ok"); await fs.readFile(probe); await fs.rm(probe);
-    checks.push({ key: "storage", label: "Object storage (local disk)", status: "ok", detail: `Write/read/delete succeeded in ${Date.now() - t0} ms` });
-  } catch { checks.push({ key: "storage", label: "Object storage (local disk)", status: "fail", detail: "Upload directory is not writable." }); }
+    const sc = await getStorageConfig();
+    t0 = Date.now();
+    const tr = await testStorage(sc);
+    checks.push({ key: "storage", label: sc.provider === "r2" ? "Media storage (Cloudflare R2)" : "Media storage (local disk)", status: tr.ok ? "ok" : "fail", detail: tr.ok ? `Write/read/delete succeeded in ${Date.now() - t0} ms` : tr.message });
+  } catch { checks.push({ key: "storage", label: "Media storage", status: "fail", detail: "Storage check failed." }); }
   try {
     const st = await fs.statfs(UPLOAD_ROOT);
     const free = Number(st.bavail) * Number(st.bsize);
