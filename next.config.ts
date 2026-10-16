@@ -34,6 +34,9 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },
+      // Never send absolute URLs with the Vercel preview domain in App_URL.
+      // JS chunks and API routes are always fetched relative to the current origin,
+      // so ERR_CERT_COMMON_NAME_INVALID only happens when APP_URL is a different host.
       { source: "/sw.js", headers: [{ key: "Cache-Control", value: "no-cache" }] },
     ];
   },

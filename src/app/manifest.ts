@@ -10,7 +10,7 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
   const start = String(s["pwa.startUrl"]).startsWith("/") ? String(s["pwa.startUrl"]) : "/home";
   return {
     name: String(s["pwa.name"]), short_name: String(s["pwa.shortName"]), description: String(s["site.description"]),
-    start_url: start, scope: "/", display, orientation: "portrait-primary", lang: String(s["site.defaultLocale"]),
+    start_url: start, scope: "/", id: "/", display, orientation: "portrait-primary", lang: String(s["site.defaultLocale"]),
     theme_color: String(s["pwa.themeColor"]), background_color: String(s["pwa.backgroundColor"]), categories: ["social", "travel", "shopping"],
     icons: [
       { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },

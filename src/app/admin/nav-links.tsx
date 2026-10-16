@@ -25,9 +25,9 @@ export function AdminNavLinks({ groups, onNavigate }: { groups: { label: string;
               aria-expanded={isOpen}
               aria-controls={id}
               onClick={() => setOpen(isOpen ? null : g.label)}
-              className={cn("flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider transition-colors", isOpen ? "bg-slate-900 text-white dark:bg-white/15 dark:text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10")}
+              className={cn("flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider transition-colors", isOpen ? "bg-slate-200 text-slate-900 dark:bg-white/10 dark:text-white" : "text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-white/5")}
             >
-              <span className="flex items-center gap-2"><span className={cn("h-2 w-2 rounded-full", isOpen ? "bg-white" : "bg-slate-400")} aria-hidden />{g.label}</span>
+              <span className="flex items-center gap-2"><span className={cn("h-2 w-2 rounded-full", isOpen ? "bg-slate-500" : "bg-slate-300")} aria-hidden />{g.label}</span>
               <ChevronRight size={16} aria-hidden className={cn("transition-transform duration-200", isOpen && "rotate-90")} />
             </button>
             {isOpen && (
@@ -35,7 +35,7 @@ export function AdminNavLinks({ groups, onNavigate }: { groups: { label: string;
                 {g.items.map((i) => (
                   <li key={i.href}>
                     <Link href={i.href} onClick={onNavigate} aria-current={active(i.href) ? "page" : undefined}
-                      className={cn("block rounded-lg px-3 py-2 text-[14px] transition-colors", active(i.href) ? "bg-slate-900/[.07] font-semibold text-slate-900 dark:bg-white/10 dark:text-white" : "text-ink/75 hover:bg-slate-100 hover:text-ink dark:hover:bg-white/5")}>
+                      className={cn("block rounded-lg px-3 py-2 text-[14px] transition-colors", active(i.href) ? "bg-primary/10 font-semibold text-primary dark:bg-primary/20" : "text-ink/70 hover:bg-slate-100 hover:text-ink dark:hover:bg-white/5")}>
                       {i.label}
                     </Link>
                   </li>

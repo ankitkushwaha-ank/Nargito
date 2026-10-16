@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
-  const base = String(s["site.baseUrl"]);
+  const base = (process.env.APP_URL || String(s["site.baseUrl"]) || "").replace(/\/$/, "").replace("http://localhost:3000","");
   const [favicon, ogImg] = await Promise.all([brandUrl("favicon"), brandUrl("og")]);
   const customOg = String(s["seo.ogImage"] || ""); const og = customOg && customOg !== "/icons/icon-512.png" ? customOg : ogImg;
   let metadataBase: URL | undefined;

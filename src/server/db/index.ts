@@ -22,12 +22,17 @@ async function create(): Promise<Db> {
     const wantsSsl = process.env.DATABASE_SSL ? process.env.DATABASE_SSL !== "false" : /[?&]ssl(mode)?=(require|verify-ca|verify-full|true|prefer)/i.test(url) || !/@(localhost|127\.0\.0\.1|\[::1\])[:/]/i.test(url);
     const cleanUrl = url.replace(/([?&])(sslmode|ssl|sslrootcert|rejectUnauthorized)=[^&]*&?/gi, "$1").replace(/[?&]$/, "");
     const ca = process.env.DATABASE_SSL_CA;
+    // Vercel serverless: each function instance is isolated; a pool of 10 per instance
+    // exhausts free-tier databases instantly. Use max=2 on serverless, or the env override.
+    const isServerless = !!(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NETLIFY);
+    const maxConns = process.env.DATABASE_POOL_MAX ? Number(process.env.DATABASE_POOL_MAX) : isServerless ? 2 : 10;
     const pool = new Pool({
       connectionString: cleanUrl,
-      max: Number(process.env.DATABASE_POOL_MAX ?? 10),
-      // keep warm connections: a new TLS handshake to a remote database costs 200-500 ms per request
-      idleTimeoutMillis: 300_000,
-      keepAlive: true,
+      max: maxConns,
+      // Serverless: release connections quickly so the limit isn't held across cold starts
+      idleTimeoutMillis: isServerless ? 5_000 : 300_000,
+      allowExitOnIdle: isServerless,
+      keepAlive: !isServerless,
       keepAliveInitialDelayMillis: 10_000,
       connectionTimeoutMillis: 10_000,
       ssl: wantsSsl ? (ca ? { ca, rejectUnauthorized: true } : { rejectUnauthorized: false }) : false,
