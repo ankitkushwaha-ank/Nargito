@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "npm run db:setup && next start",
+    "start": "next start",
     "start:fast": "next start",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
