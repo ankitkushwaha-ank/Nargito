@@ -20,6 +20,9 @@ async function create(): Promise<Db> {
     const pool = new Pool({ connectionString: url, max: Number(process.env.DATABASE_POOL_MAX ?? 10) });
     return drizzle(pool, { schema }) as Db;
   }
+  if (process.env.VERCEL && !url?.startsWith("pglite:")) {
+    throw new Error("DATABASE_URL is missing or invalid. Set it to a postgres:// connection string in the Vercel project's Environment Variables, then redeploy.");
+  }
   const dir = url?.startsWith("pglite:") ? url.slice(7) : ".data/pglite";
   const { PGlite } = await import("@electric-sql/pglite");
   const { drizzle } = await import("drizzle-orm/pglite");
