@@ -1,6 +1,6 @@
 import { promises as fs } from "node:fs";
 import { NextResponse, type NextRequest } from "next/server";
-import { brandFile, isBrandKind } from "@/server/brand";
+import { BRAND_SLOTS, brandFile, isBrandKind } from "@/server/brand";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +14,8 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ kind: stri
     const type = file.endsWith(".png") ? "image/png" : "image/jpeg";
     return new NextResponse(new Uint8Array(data), { headers: { "Content-Type": type, "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400", ETag: `"${Math.round(mtime)}-${data.length}"` } });
   } catch {
-    return new NextResponse("Not found", { status: 404 });
+    // Hosts that do not ship the public/ folder next to the server (serverless, standalone): send the browser to the static copy.
+    const url = "/" + BRAND_SLOTS[kind].fallback.replace(/^public\//, "");
+    return NextResponse.redirect(new URL(url, _req.nextUrl.origin), 307);
   }
 }

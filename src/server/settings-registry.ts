@@ -52,6 +52,7 @@ export const SETTINGS: SettingDef[] = [
   S("defaults.pageSize", "general", "Default list page size", "number", 20, { min: 5, max: 100 }),
   S("defaults.profileVisibility", "general", "Default profile visibility", "select", "public", { options: ["public", "connections", "private"] }),
 
+  S("brand.wordmarkText", "website", "App name text (replaces the Nargito name image)", "string", "", { help: "Optional. Type a name here to show it as text, in the same style and size, instead of the name image. Leave empty to keep the image." }),
   S("brand.tagline", "website", "Tagline", "string", "Connect. Share. Discover."),
   S("brand.footerText", "website", "Footer text", "text", "Nargito helps people and businesses connect, travel and trade locally."),
   S("brand.metaKeywords", "website", "Meta keywords", "string", "social network, trips, marketplace, local business"),

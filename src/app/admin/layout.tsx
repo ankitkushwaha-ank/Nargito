@@ -1,4 +1,4 @@
-﻿import { requireAdminPage } from "@/server/auth/guard";
+import { requireAdminPage } from "@/server/auth/guard";
 import { visibleAdminGroups } from "@/server/admin-nav";
 import { getSetting } from "@/server/settings";
 import { AdminShell } from "./shell";
@@ -7,5 +7,5 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const user = await requireAdminPage();
   const groups = await visibleAdminGroups(user.id);
   const siteName = String(await getSetting("site.name"));
-  return <AdminShell groups={groups} user={{ displayName: user.displayName, avatarUrl: user.avatarUrl }} siteName={siteName}>{children}</AdminShell>;
+  return <AdminShell groups={groups} user={{ displayName: user.displayName, avatarUrl: user.avatarUrl }} siteName={siteName} wordmarkText={String(await getSetting("brand.wordmarkText"))}>{children}</AdminShell>;
 }
