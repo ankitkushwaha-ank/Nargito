@@ -11,3 +11,6 @@ test-results
 Thumbs.db
 desktop.ini
 .data
+
+# generated SQL dump (contains demo password hashes)
+database/*.sql
