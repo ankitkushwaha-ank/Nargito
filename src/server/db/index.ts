@@ -17,12 +17,15 @@ async function create(): Promise<Db> {
   if (url && /^postgres(ql)?:\/\//.test(url)) {
     const { drizzle } = await import("drizzle-orm/node-postgres");
     const { Pool } = await import("pg");
-    const pool = new Pool({ 
-      connectionString: url, 
+    // node-postgres lets ssl settings inside the URL (sslmode=...) override the `ssl` option, which breaks
+    // self-signed hosts such as Aiven. So strip them from the URL and decide SSL here.
+    const wantsSsl = process.env.DATABASE_SSL ? process.env.DATABASE_SSL !== "false" : /[?&]ssl(mode)?=(require|verify-ca|verify-full|true|prefer)/i.test(url) || !/@(localhost|127\.0\.0\.1|\[::1\])[:/]/i.test(url);
+    const cleanUrl = url.replace(/([?&])(sslmode|ssl|sslrootcert|rejectUnauthorized)=[^&]*&?/gi, "$1").replace(/[?&]$/, "");
+    const ca = process.env.DATABASE_SSL_CA;
+    const pool = new Pool({
+      connectionString: cleanUrl,
       max: Number(process.env.DATABASE_POOL_MAX ?? 10),
-      ssl: {
-        rejectUnauthorized: false, // <-- Crucial fix to allow Aiven's self-signed certificate
-      },
+      ssl: wantsSsl ? (ca ? { ca, rejectUnauthorized: true } : { rejectUnauthorized: false }) : false,
     });
     return drizzle(pool, { schema }) as Db;
   }
