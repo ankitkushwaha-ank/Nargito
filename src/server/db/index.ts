@@ -17,7 +17,13 @@ async function create(): Promise<Db> {
   if (url && /^postgres(ql)?:\/\//.test(url)) {
     const { drizzle } = await import("drizzle-orm/node-postgres");
     const { Pool } = await import("pg");
-    const pool = new Pool({ connectionString: url, max: Number(process.env.DATABASE_POOL_MAX ?? 10) });
+    const pool = new Pool({ 
+      connectionString: url, 
+      max: Number(process.env.DATABASE_POOL_MAX ?? 10),
+      ssl: {
+        rejectUnauthorized: false, // <-- Crucial fix to allow Aiven's self-signed certificate
+      },
+    });
     return drizzle(pool, { schema }) as Db;
   }
   if (process.env.VERCEL && !url?.startsWith("pglite:")) {
