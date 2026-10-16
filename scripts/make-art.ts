@@ -1,0 +1,44 @@
+import sharp from "sharp";
+import { mkdirSync, writeFileSync } from "node:fs";
+import path from "node:path";
+
+/**
+ * Generates the branded illustrations used as cover/thumbnail art for the demo content
+ * (public/art/*.jpg). They are original vector scenes rendered locally - no third-party imagery.
+ */
+const OUT = path.resolve("public", "art");
+mkdirSync(OUT, { recursive: true });
+const W = 1200, H = 800;
+
+const defs = (id: string, a: string, b: string) => `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs>`;
+const svg = (body: string) => `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${body}</svg>`;
+const mountains = (cols: [string, string, string], base = 560) => `
+  <polygon points="0,${base} 180,${base - 250} 340,${base - 90} 520,${base - 330} 720,${base - 120} 900,${base - 280} 1200,${base - 60} 1200,${H} 0,${H}" fill="${cols[0]}"/>
+  <polygon points="0,${base + 70} 220,${base - 120} 420,${base + 20} 640,${base - 180} 860,${base + 30} 1040,${base - 110} 1200,${base + 40} 1200,${H} 0,${H}" fill="${cols[1]}"/>
+  <polygon points="0,${base + 150} 300,${base + 10} 560,${base + 120} 820,${base - 10} 1200,${base + 130} 1200,${H} 0,${H}" fill="${cols[2]}"/>`;
+const stars = (n: number, seed: number) => Array.from({ length: n }, (_, i) => { const x = (i * 9301 + seed * 49297) % W, y = (i * 233 + seed * 977) % 360; return `<circle cx="${x}" cy="${y}" r="${1 + (i % 3)}" fill="#fff" opacity="${0.35 + (i % 4) * 0.15}"/>`; }).join("");
+
+const scenes: Record<string, string> = {
+  trek: svg(`${defs("g", "#0b1f6e", "#7ab8ff")}<rect width="${W}" height="${H}" fill="url(#g)"/>${stars(60, 1)}<circle cx="880" cy="230" r="70" fill="#fff6d6" opacity=".95"/>${mountains(["#3a63d8", "#274bb0", "#16318a"])}<path d="M120 760 C 380 640 520 700 700 600 S 980 560 1100 470" stroke="#fff" stroke-width="6" stroke-dasharray="4 18" stroke-linecap="round" fill="none"/><circle cx="1100" cy="470" r="16" fill="#ffd54a"/>`),
+  jaipur: svg(`${defs("g", "#ff8a5b", "#ffd9a0")}<rect width="${W}" height="${H}" fill="url(#g)"/><circle cx="600" cy="360" r="140" fill="#fff3d0" opacity=".9"/><g fill="#a8431f"><rect x="100" y="470" width="200" height="330"/><rect x="330" y="400" width="160" height="400"/><rect x="520" y="430" width="260" height="370"/><rect x="810" y="410" width="150" height="390"/><rect x="990" y="480" width="150" height="320"/></g><g fill="#7a2b12"><path d="M520 800 V600 a130 130 0 0 1 260 0 V800z"/><path d="M130 800 V650 a70 70 0 0 1 140 0 V800z"/><path d="M1010 800 V670 a55 55 0 0 1 110 0 V800z"/></g><g fill="#ffe7b0"><circle cx="650" cy="520" r="14"/><rect x="400" y="450" width="26" height="50" rx="13"/><rect x="850" y="460" width="24" height="48" rx="12"/></g>`),
+  beach: svg(`${defs("g", "#ff9966", "#ff5e62")}<rect width="${W}" height="${H}" fill="url(#g)"/><circle cx="600" cy="430" r="120" fill="#ffe6a8"/><rect y="470" width="${W}" height="330" fill="#1a5fb4"/><rect y="470" width="${W}" height="10" fill="#fff" opacity=".4"/><path d="M0 650 Q300 600 600 650 T1200 650 V800 H0z" fill="#f4d9a0"/><g stroke="#0f3a7a" stroke-width="5" opacity=".5"><path d="M200 520h200M720 540h260M450 580h160"/></g>`),
+  camera: svg(`${defs("g", "#e8efff", "#b9ccff")}<rect width="${W}" height="${H}" fill="url(#g)"/><rect x="250" y="260" width="700" height="400" rx="50" fill="#1a2550"/><rect x="250" y="260" width="700" height="130" rx="50" fill="#263578"/><circle cx="600" cy="470" r="150" fill="#0d1535"/><circle cx="600" cy="470" r="115" fill="#315efb"/><circle cx="600" cy="470" r="70" fill="#0d1535"/><circle cx="570" cy="440" r="22" fill="#fff" opacity=".7"/><rect x="330" y="220" width="130" height="60" rx="14" fill="#263578"/><circle cx="850" cy="330" r="22" fill="#ffd54a"/>`),
+  bakery: svg(`${defs("g", "#ffe9d6", "#ffc9a3")}<rect width="${W}" height="${H}" fill="url(#g)"/><ellipse cx="600" cy="640" rx="380" ry="60" fill="#d9894b" opacity=".4"/><rect x="330" y="400" width="540" height="230" rx="30" fill="#f4b183"/><rect x="330" y="330" width="540" height="110" rx="55" fill="#fff4e8"/><g fill="#e86a92"><circle cx="420" cy="330" r="26"/><circle cx="540" cy="305" r="26"/><circle cx="660" cy="305" r="26"/><circle cx="780" cy="330" r="26"/></g><g fill="#fff"><circle cx="420" cy="322" r="8"/><circle cx="540" cy="297" r="8"/><circle cx="660" cy="297" r="8"/><circle cx="780" cy="322" r="8"/></g><g stroke="#e0905c" stroke-width="8" stroke-linecap="round"><path d="M390 520h420M390 570h420"/></g>`),
+  cycle: svg(`${defs("g", "#d6f2ff", "#8fd0f5")}<rect width="${W}" height="${H}" fill="url(#g)"/><rect y="600" width="${W}" height="200" fill="#2e8b57" opacity=".85"/><g fill="none" stroke="#10265f" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="400" cy="560" r="130"/><circle cx="820" cy="560" r="130"/><path d="M400 560 L520 380 L720 380 L820 560 M520 380 L600 560 L400 560 M720 380 L640 330 H690 M520 380 L500 330 H560"/></g><circle cx="400" cy="560" r="12" fill="#315efb"/><circle cx="820" cy="560" r="12" fill="#315efb"/>`),
+  wellness: svg(`${defs("g", "#e6f7ee", "#a8e0c3")}<rect width="${W}" height="${H}" fill="url(#g)"/><circle cx="600" cy="330" r="190" fill="#fff" opacity=".6"/><circle cx="600" cy="330" r="120" fill="#fff" opacity=".7"/><g fill="#1d6b52"><circle cx="600" cy="300" r="42"/><path d="M470 600 q130 -230 260 0 z"/><path d="M430 640 q170 -60 340 0 v30 H430z"/></g><ellipse cx="600" cy="690" rx="330" ry="26" fill="#1d6b52" opacity=".25"/>`),
+  laptop: svg(`${defs("g", "#101a45", "#315efb")}<rect width="${W}" height="${H}" fill="url(#g)"/><rect x="290" y="210" width="620" height="390" rx="26" fill="#0b1235"/><rect x="315" y="235" width="570" height="340" rx="12" fill="#14224f"/><g fill="#6ea0ff"><rect x="350" y="275" width="200" height="14" rx="7"/><rect x="350" y="310" width="330" height="14" rx="7" opacity=".7"/><rect x="380" y="345" width="260" height="14" rx="7" opacity=".7"/><rect x="380" y="380" width="180" height="14" rx="7" opacity=".7"/></g><g fill="#ffd54a"><rect x="350" y="430" width="120" height="14" rx="7"/></g><path d="M230 620h740l50 70H180z" fill="#cdd8ff"/>`),
+  keyboard: svg(`${defs("g", "#1b1f3a", "#3d4a9e")}<rect width="${W}" height="${H}" fill="url(#g)"/><rect x="170" y="250" width="860" height="330" rx="36" fill="#0f1330"/>${Array.from({ length: 4 }, (_, r) => Array.from({ length: 12 }, (_, c) => `<rect x="${205 + c * 68}" y="${280 + r * 70}" width="56" height="56" rx="10" fill="${(r + c) % 5 === 0 ? "#315efb" : "#232a5c"}"/>`).join("")).join("")}`),
+  print: svg(`${defs("g", "#fff1e0", "#f8cf9a")}<rect width="${W}" height="${H}" fill="url(#g)"/><rect x="330" y="150" width="540" height="500" fill="#fff" stroke="#e5c392" stroke-width="10"/>${mountains(["#3a63d8", "#274bb0", "#16318a"], 470).replace(/<polygon/g, '<polygon transform="translate(0,0)"')}<rect x="330" y="150" width="540" height="190" fill="#9ec7ff"/><circle cx="740" cy="230" r="34" fill="#fff6d6"/><rect x="330" y="560" width="540" height="90" fill="#fff"/><rect x="330" y="470" width="540" height="90" fill="#274bb0" opacity="0"/>`),
+  guide: svg(`${defs("g", "#183b6b", "#87c3ff")}<rect width="${W}" height="${H}" fill="url(#g)"/>${stars(40, 3)}${mountains(["#2b5fa8", "#1d4682", "#10305c"], 520)}<g fill="#ffd54a"><circle cx="610" cy="360" r="20"/><path d="M590 385 h40 l14 90 h-68z"/></g><path d="M500 740 L610 475" stroke="#fff" stroke-width="5" stroke-dasharray="3 14" stroke-linecap="round"/>`),
+  food: svg(`${defs("g", "#ffe5b4", "#ffb347")}<rect width="${W}" height="${H}" fill="url(#g)"/><circle cx="600" cy="420" r="250" fill="#fff" opacity=".85"/><circle cx="600" cy="420" r="200" fill="#e05a2b"/><g fill="#ffd54a"><circle cx="520" cy="360" r="38"/><circle cx="660" cy="380" r="38"/><circle cx="590" cy="480" r="38"/></g><g fill="#2e8b57"><circle cx="680" cy="470" r="14"/><circle cx="500" cy="450" r="14"/><circle cx="610" cy="320" r="14"/></g>`),
+  community: svg(`${defs("g", "#5b7bff", "#b8c8ff")}<rect width="${W}" height="${H}" fill="url(#g)"/><g fill="#fff">${[[330, 400, 70], [520, 330, 90], [740, 380, 80], [920, 440, 60], [180, 480, 55]].map(([x, y, r]) => `<circle cx="${x}" cy="${y! - r! - 20}" r="${r! * 0.45}"/><path d="M${x! - r!} ${y! + 120} q${r} -${r! * 1.6} ${r! * 2} 0z"/>`).join("")}</g><path d="M180 700 H1020" stroke="#fff" stroke-width="6" opacity=".4"/>`),
+};
+
+async function main() {
+  for (const [name, body] of Object.entries(scenes)) {
+    const buf = await sharp(Buffer.from(body)).resize(1200, 800).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
+    writeFileSync(path.join(OUT, `${name}.jpg`), buf);
+  }
+  console.log("art generated:", Object.keys(scenes).join(", "));
+}
+main().catch((e) => { console.error(e); process.exit(1); });

@@ -1,0 +1,76 @@
+export type AdminNavItem = { label: string; href: string; perm: string; feature?: string };
+export type AdminNavGroup = { label: string; items: AdminNavItem[] };
+
+/** Admin navigation. Visibility is a convenience only: every route and action re-checks permissions on the server. */
+export const ADMIN_NAV: AdminNavGroup[] = [
+  { label: "Overview", items: [
+    { label: "Dashboard", href: "/admin", perm: "admin.access" },
+    { label: "Analytics", href: "/admin/analytics", perm: "analytics.read" },
+    { label: "System health", href: "/admin/health", perm: "health.read" },
+  ] },
+  { label: "Content", items: [
+    { label: "Posts", href: "/admin/content/posts", perm: "content.read", feature: "posts" },
+    { label: "Trips", href: "/admin/content/trips", perm: "content.read", feature: "trips" },
+    { label: "Products", href: "/admin/content/products", perm: "content.read", feature: "products" },
+    { label: "Services", href: "/admin/content/services", perm: "content.read", feature: "services" },
+    { label: "Companies", href: "/admin/content/companies", perm: "content.read", feature: "companies" },
+    { label: "Shops", href: "/admin/content/shops", perm: "content.read", feature: "shops" },
+    { label: "Groups", href: "/admin/content/groups", perm: "content.read", feature: "groups" },
+    { label: "Categories", href: "/admin/categories", perm: "content.moderate", feature: "categories" },
+    { label: "Reports & moderation", href: "/admin/reports", perm: "reports.manage" },
+    { label: "Pages & CMS", href: "/admin/pages", perm: "cms.manage" },
+  ] },
+  { label: "Users", items: [
+    { label: "Manage users", href: "/admin/users", perm: "users.read" },
+    { label: "Online users", href: "/admin/users/online", perm: "users.read" },
+    { label: "Verification", href: "/admin/verification", perm: "verification.manage", feature: "verification" },
+    { label: "Contact messages", href: "/admin/contact", perm: "users.read" },
+  ] },
+  { label: "Communication", items: [
+    { label: "Messaging", href: "/admin/settings/chat", perm: "settings.integrations" },
+    { label: "Notifications & announcements", href: "/admin/notifications", perm: "settings.general" },
+    { label: "Email & SMS", href: "/admin/settings/email_sms", perm: "settings.integrations" },
+    { label: "Realtime & runtime", href: "/admin/settings/runtime", perm: "settings.integrations" },
+  ] },
+  { label: "Monetization", items: [
+    { label: "Advertising policy", href: "/admin/settings/ads", perm: "ads.manage", feature: "promotions" },
+    { label: "Promotions queue", href: "/admin/promotions", perm: "ads.manage", feature: "promotions" },
+    { label: "Pro configuration", href: "/admin/pro/config", perm: "pro.manage", feature: "pro" },
+    { label: "Pro features", href: "/admin/pro/features", perm: "pro.manage", feature: "pro" },
+    { label: "Pro members", href: "/admin/pro/members", perm: "pro.manage", feature: "pro" },
+    { label: "Pro payments", href: "/admin/pro/payments", perm: "pro.manage", feature: "pro" },
+    { label: "Pro refunds", href: "/admin/pro/refunds", perm: "pro.manage", feature: "pro" },
+  ] },
+  { label: "Configuration", items: [
+    { label: "General", href: "/admin/settings/general", perm: "settings.general" },
+    { label: "Website information", href: "/admin/settings/website", perm: "settings.general" },
+    { label: "Logo & images", href: "/admin/branding", perm: "settings.general" },
+    { label: "Manage features", href: "/admin/features", perm: "features.manage" },
+    { label: "Languages", href: "/admin/languages", perm: "languages.manage" },
+    { label: "File uploads", href: "/admin/settings/uploads", perm: "settings.uploads" },
+    { label: "Social login", href: "/admin/settings/social", perm: "settings.integrations" },
+    { label: "AI", href: "/admin/settings/ai", perm: "settings.integrations", feature: "ai" },
+    { label: "PWA", href: "/admin/settings/pwa", perm: "settings.pwa" },
+    { label: "Mobile app", href: "/admin/settings/mobile", perm: "settings.pwa" },
+    { label: "Posts & feed", href: "/admin/settings/posts", perm: "settings.posts" },
+    { label: "Design & themes", href: "/admin/settings/design", perm: "settings.design" },
+    { label: "Location", href: "/admin/settings/location", perm: "settings.general" },
+    { label: "SEO & redirects", href: "/admin/seo", perm: "settings.seo" },
+    { label: "Maintenance mode", href: "/admin/settings/maintenance", perm: "settings.maintenance" },
+  ] },
+  { label: "Operations", items: [
+    { label: "System logs", href: "/admin/logs", perm: "logs.read" },
+    { label: "Audit logs", href: "/admin/audit", perm: "audit.read" },
+    { label: "Debugger & health", href: "/admin/debugger", perm: "health.read" },
+    { label: "Cron jobs", href: "/admin/cron", perm: "jobs.manage" },
+    { label: "Tools", href: "/admin/tools", perm: "tools.run" },
+    { label: "Backup status", href: "/admin/backups", perm: "health.read" },
+  ] },
+  { label: "Security", items: [
+    { label: "Roles & permissions", href: "/admin/roles", perm: "roles.manage" },
+    { label: "Admin sessions", href: "/admin/sessions", perm: "security.manage" },
+    { label: "Security events", href: "/admin/security-events", perm: "security.manage" },
+    { label: "Emergency controls", href: "/admin/emergency", perm: "security.manage" },
+    { label: "Approvals", href: "/admin/approvals", perm: "approvals.decide" },
+  ] },
+];
