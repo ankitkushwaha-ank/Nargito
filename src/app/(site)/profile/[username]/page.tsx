@@ -190,6 +190,7 @@ export default async function ProfilePage({ params, searchParams }: { params: Pr
             ))}
             {tab === "resume" && ((u.resume ?? []).length === 0 ? <EmptyState title="No resume yet" description={self ? "Add your experience and education so people can get to know you." : `${first} hasn't added a resume yet.`} action={self ? <Link href="/settings/profile" className="btn-primary">Add resume</Link> : undefined} /> : (
               <section className="card p-5 sm:p-6" aria-label="Resume">
+                {(u.resume ?? []).find((r) => r.kind === "file") && <a href={(u.resume ?? []).find((r) => r.kind === "file")!.org} target="_blank" rel="noopener noreferrer" className="btn-primary mb-5"><ScrollText size={16} aria-hidden />View / download resume (PDF)</a>}
                 {(["experience", "education", "certification"] as const).map((k) => {
                   const list = (u.resume ?? []).filter((r) => r.kind === k);
                   if (!list.length) return null;

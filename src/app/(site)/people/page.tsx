@@ -24,8 +24,9 @@ export default async function PeoplePage({ searchParams }: { searchParams: Promi
   const followed = viewer ? new Set((await db.select({ id: schema.follows.followingId }).from(schema.follows).where(eq(schema.follows.followerId, viewer.id))).map((r) => r.id)) : new Set<string>();
   return (
     <FeatureGate feature="profiles">
+      <PageBanner kind="banner-people" eyebrow="People" title="Meet" accent="Real People" description="Members who have chosen to be discoverable." />
       <Container>
-        <PageBanner kind="banner-people" eyebrow="People" title="Meet" accent="Real People" description="Members who have chosen to be discoverable." />
+
         <form className="mb-4 flex gap-2" role="search"><label className="sr-only" htmlFor="pq">Search people</label><input id="pq" name="q" defaultValue={q} className="input" placeholder="Search by name, username or headline" /><button className="btn-primary">Search</button></form>
         {rows.length === 0 ? <EmptyState title="No people found" /> : (
           <ul className="grid gap-3 sm:grid-cols-2">

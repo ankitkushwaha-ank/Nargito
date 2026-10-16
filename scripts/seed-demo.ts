@@ -212,6 +212,7 @@ export async function seedDemo(db: Db) {
     { userId: U["demo"]!, type: "enquiry", actorId: U["rohan_mehta"]!, title: "Rohan replied to your enquiry", body: "10 am at the store. I'll have it serviced and ready.", link: `/messages/${c1!.id}`, createdAt: ago(1) },
     { userId: U["demo"]!, type: "business", actorId: U["ananya_rao"]!, title: "New update from Ananya's Bakehouse", link: "/shops/ananyas-bakehouse", readAt: ago(5), createdAt: ago(15) },
   ]);
+  
 
   // sponsored placements (approved demo promotions)
   const until = new Date(Date.now() + 30 * 86400_000);

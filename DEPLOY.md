@@ -29,7 +29,7 @@ Put nginx, Caddy or your host's proxy in front of it for https.
 ## 4. Scheduled jobs
 Call every 5 to 15 minutes from cron or your host scheduler:
 ```
-curl -X POST -H "Authorization: Bearer $CRON_SECRET" https://your-domain.com/api/cron/<job>
+curl -X POST -H "Authorization: Bearer $CRON_SECRET" https://nargito.in/api/cron/<job>
 ```
 Job names are listed in Admin > System health.
 

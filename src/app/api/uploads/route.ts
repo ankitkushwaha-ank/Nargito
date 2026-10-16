@@ -19,7 +19,7 @@ export const POST = api(async (req) => {
   const purpose = String(form.get("purpose") ?? "post");
   const results = [];
   for (const f of files) {
-    results.push(await saveUpload(user.id, f, { alt, only: purpose === "avatar" || purpose === "cover" ? ["image"] : undefined, isPrivate: purpose === "evidence" }));
+    results.push(await saveUpload(user.id, f, { alt, only: purpose === "avatar" || purpose === "cover" ? ["image"] : purpose === "resume" ? ["document"] : undefined, isPrivate: purpose === "evidence" }));
   }
   return { ok: true, files: results };
 });

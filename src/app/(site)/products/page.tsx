@@ -20,8 +20,9 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   const [{ items, hasMore }, cats] = await Promise.all([listProducts({ q: sp.q?.slice(0, 100), category: sp.category, min: num(sp.min), max: num(sp.max), sort, page }), categoryNames("product")]);
   return (
     <FeatureGate feature="products">
+      <PageBanner kind="banner-marketplace" eyebrow="Marketplace" title="Buy Local," accent="Support Real People." description="Discover unique products, handmade items, local shops and services from people around you." actions={<Link href="/my/listings/product/new" className="btn-primary">List a product</Link>} />
       <Container width="max-w-6xl">
-        <PageBanner kind="banner-marketplace" eyebrow="Marketplace" title="Buy Local," accent="Support Real People." description="Discover unique products, handmade items, local shops and services from people around you." actions={<Link href="/my/listings/product/new" className="btn-primary">List a product</Link>} />
+
         <FilterBar action="/products" q={sp.q} fields={[
           { name: "category", label: "Category", value: sp.category, options: cats.map((c) => ({ value: c, label: c })) },
           { name: "min", label: "Min price", value: sp.min, type: "number" }, { name: "max", label: "Max price", value: sp.max, type: "number" },

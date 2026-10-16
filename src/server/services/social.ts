@@ -185,7 +185,7 @@ const profileSchema = z.object({
   coverUrl: optStr(300),
   resumeJson: z.string().max(30000).optional(),
 });
-const resumeItem = z.object({ kind: z.enum(["experience", "education", "certification"]), title: z.string().trim().min(1).max(120), org: z.string().trim().max(120).default(""), from: z.string().trim().max(20).default(""), to: z.string().trim().max(20).default(""), description: z.string().trim().max(600).default("") });
+const resumeItem = z.object({ kind: z.enum(["experience", "education", "certification", "file"]), title: z.string().trim().min(1).max(120), org: z.string().trim().max(300).default(""), from: z.string().trim().max(20).default(""), to: z.string().trim().max(20).default(""), description: z.string().trim().max(600).default("") }).refine((i) => i.kind !== "file" || /^\/api\/media\/[0-9a-f-]{36}$/i.test(i.org), { message: "Invalid resume file." });
 const mediaUrl = /^(\/api\/media\/[0-9a-f-]{36}(\?thumb=1)?|\/(art|images)\/[a-z0-9-]+\.jpg)$/i;
 
 export async function updateProfile(userId: string, input: unknown): Promise<ActionResult> {

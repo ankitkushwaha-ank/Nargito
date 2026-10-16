@@ -35,8 +35,9 @@ export default async function Explore() {
   const nothing = !trips.length && !shops.length && !products.length && !services.length && !groups.length;
   return (
     <FeatureGate feature="search">
+      <PageBanner kind="banner-explore" eyebrow="Explore" title="Discover New" accent="Experiences" description="Find trips, local shops, products, services and amazing people around you."><SearchBox className="max-w-md" /></PageBanner>
       <Container width="max-w-6xl">
-        <PageBanner kind="banner-explore" eyebrow="Explore" title="Discover New" accent="Experiences" description="Find trips, local shops, products, services and amazing people around you."><SearchBox className="max-w-md" /></PageBanner>
+
         <nav aria-label="Categories" className="no-scrollbar -mx-1 mb-7 flex gap-3 overflow-x-auto px-1 pb-1 sm:justify-between">
           {[["/trips", "Trips", Plane, "bg-blue-100 text-primary"], ["/shops", "Shops", Store, "bg-emerald-100 text-emerald-600"], ["/products", "Products", ShoppingBag, "bg-violet-100 text-violet-600"], ["/services", "Services", Wrench, "bg-indigo-100 text-indigo-600"], ["/search?q=food", "Food & Drinks", UtensilsCrossed, "bg-orange-100 text-orange-500"], ["/search?q=stay", "Stays", Home, "bg-sky-100 text-sky-600"], ["/groups", "Events", CalendarDays, "bg-pink-100 text-pink-500"], ["/people", "People", UserRound, "bg-rose-100 text-rose-500"]].map(([href, label, Icon, tone]) => {
             const I = Icon as typeof Plane;

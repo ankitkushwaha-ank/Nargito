@@ -16,8 +16,9 @@ export default async function ShopsPage({ searchParams }: { searchParams: Promis
   const [{ items, hasMore }, cats] = await Promise.all([listShops({ q: sp.q?.slice(0, 100), category: sp.category, page }), categoryNames("shop")]);
   return (
     <FeatureGate feature="shops">
+      <PageBanner kind="banner-shops" eyebrow="Shops" title="Local" accent="Shops" description="Discover and support businesses in your community." actions={<Link href="/my/businesses/shop/new" className="btn-primary">Open a shop</Link>} />
       <Container width="max-w-6xl">
-        <PageBanner kind="banner-shops" eyebrow="Shops" title="Local" accent="Shops" description="Discover and support businesses in your community." actions={<Link href="/my/businesses/shop/new" className="btn-primary">Open a shop</Link>} />
+
         <FilterBar action="/shops" q={sp.q} fields={[{ name: "category", label: "Category", value: sp.category, options: cats.map((c) => ({ value: c, label: c })) }]} />
         {items.length === 0 ? <EmptyState title="No shops found" /> : <CardGrid>{items.map((s) => <ListingCard key={s.id} href={`/shops/${s.slug}`} title={s.name} subtitle={s.description?.slice(0, 100)} image={s.logoUrl ?? s.coverUrl} badge={s.category} verified={s.verified} meta={s.locationLabel} ratio="aspect-[16/9]" />)}</CardGrid>}
         <Pager page={page} hasMore={hasMore} basePath="/shops" params={{ q: sp.q, category: sp.category }} />

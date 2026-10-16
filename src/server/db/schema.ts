@@ -22,7 +22,7 @@ export const users = pgTable("users", {
   geoCell: text("geo_cell"), // coarse grid cell only - never precise coordinates
   website: text("website"),
   skills: text("skills").array().notNull().default([]),
-  resume: jsonb("resume").$type<{ kind: "experience" | "education" | "certification"; title: string; org: string; from: string; to: string; description: string }[]>().notNull().default([]),
+  resume: jsonb("resume").$type<{ kind: "experience" | "education" | "certification" | "file"; title: string; org: string; from: string; to: string; description: string }[]>().notNull().default([]),
   accountType: text("account_type").notNull().default("personal"), // personal | business
   avatarUrl: text("avatar_url"),
   coverUrl: text("cover_url"),
