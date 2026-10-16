@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import {
   Activity, BarChart3, Bell, Building2, Bug, CheckSquare, Clock, CreditCard, Crown, DatabaseBackup, FileText, Flag, Globe, HeartPulse, Image as ImageIcon,
   KeyRound, Languages, LayoutDashboard, ListChecks, Mail, MapPin, Megaphone, MessageSquare, Monitor, Newspaper, Palette, Plane, Radio, ScrollText, Search,
@@ -21,7 +21,7 @@ const ICONS: Record<string, LucideIcon> = {
 };
 
 /** Phone/tablet dashboard: every admin option as a tappable tile, two per row. */
-export function AdminOptionGrid({ groups }: { groups: VisibleGroup[] }) {
+export function AdminOptionGrid({ groups, counts = {} }: { groups: VisibleGroup[]; counts?: Record<string, string> }) {
   const list = groups.map((g) => ({ ...g, items: g.items.filter((i) => i.href !== "/admin") })).filter((g) => g.items.length);
   return (
     <section aria-label="All admin options" className="lg:hidden">
@@ -38,7 +38,7 @@ export function AdminOptionGrid({ groups }: { groups: VisibleGroup[] }) {
                   <li key={i.href}>
                     <Link href={i.href} className="card flex h-full min-h-[84px] flex-col items-start justify-between gap-2 p-3.5 transition-all active:scale-[0.98] hover:border-primary/40 hover:shadow-md">
                       <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-tint text-primary"><Icon size={18} aria-hidden /></span>
-                      <span className="text-[13.5px] font-bold leading-snug">{i.label}</span>
+                      <span><span className="block text-[13.5px] font-bold leading-snug">{i.label}</span>{counts[i.href] && <span className="mt-0.5 block text-xs font-semibold text-primary">{counts[i.href]}</span>}</span>
                     </Link>
                   </li>
                 );

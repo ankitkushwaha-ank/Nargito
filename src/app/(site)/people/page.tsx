@@ -3,7 +3,8 @@ import { and, desc, eq, sql } from "drizzle-orm";
 import { useDb, schema } from "@/server/db";
 import { getSessionUser } from "@/server/auth/session";
 import { Container } from "@/components/shell/frames";
-import { Avatar, EmptyState, PageHeader, Pager, VerifiedBadge } from "@/components/ui/kit";
+import { Avatar, EmptyState, Pager, VerifiedBadge } from "@/components/ui/kit";
+import { PageBanner } from "@/components/ui/page-banner";
 import { FeatureGate } from "@/components/ui/feature-gate";
 import { FollowButton } from "@/components/social/relationship-buttons";
 import { likeEscape } from "@/server/util";
@@ -24,7 +25,7 @@ export default async function PeoplePage({ searchParams }: { searchParams: Promi
   return (
     <FeatureGate feature="profiles">
       <Container>
-        <PageHeader title="People" description="Members who have chosen to be discoverable." />
+        <PageBanner kind="banner-people" eyebrow="People" title="Meet" accent="Real People" description="Members who have chosen to be discoverable." />
         <form className="mb-4 flex gap-2" role="search"><label className="sr-only" htmlFor="pq">Search people</label><input id="pq" name="q" defaultValue={q} className="input" placeholder="Search by name, username or headline" /><button className="btn-primary">Search</button></form>
         {rows.length === 0 ? <EmptyState title="No people found" /> : (
           <ul className="grid gap-3 sm:grid-cols-2">

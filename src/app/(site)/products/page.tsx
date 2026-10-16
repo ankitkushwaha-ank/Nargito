@@ -1,6 +1,7 @@
 import { Container } from "@/components/shell/frames";
 import { FeatureGate } from "@/components/ui/feature-gate";
-import { PageHeader, EmptyState, Pager } from "@/components/ui/kit";
+import { EmptyState, Pager } from "@/components/ui/kit";
+import { PageBanner } from "@/components/ui/page-banner";
 import { CardGrid, ListingCard } from "@/components/ui/listing-card";
 import { FilterBar } from "@/components/ui/filter-bar";
 import { listProducts, categoryNames } from "@/server/services/listings";
@@ -20,7 +21,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   return (
     <FeatureGate feature="products">
       <Container width="max-w-6xl">
-        <PageHeader title="Products" description="Listings from members and shops. Contact the seller with an enquiry." actions={<Link href="/my/listings/product/new" className="btn-primary">List a product</Link>} />
+        <PageBanner kind="banner-marketplace" eyebrow="Marketplace" title="Buy Local," accent="Support Real People." description="Discover unique products, handmade items, local shops and services from people around you." actions={<Link href="/my/listings/product/new" className="btn-primary">List a product</Link>} />
         <FilterBar action="/products" q={sp.q} fields={[
           { name: "category", label: "Category", value: sp.category, options: cats.map((c) => ({ value: c, label: c })) },
           { name: "min", label: "Min price", value: sp.min, type: "number" }, { name: "max", label: "Max price", value: sp.max, type: "number" },

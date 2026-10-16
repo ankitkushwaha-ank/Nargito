@@ -37,7 +37,7 @@ export default async function TripsPage({ searchParams }: { searchParams: Promis
     <FeatureGate feature="trips">
       <section className="relative isolate overflow-hidden bg-white text-slate-900">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/api/brand/hero-mobile" alt="" aria-hidden className="absolute inset-0 -z-10 h-full w-full object-cover object-[80%_30%]" fetchPriority="high" />
+        <img src="/api/brand/banner-trips" alt="" aria-hidden className="absolute inset-0 -z-10 h-full w-full object-cover object-[80%_30%]" fetchPriority="high" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-white via-white/85 to-white/10 sm:via-white/70" aria-hidden />
         <div className="mx-auto max-w-shell px-4 pb-20 pt-10 sm:px-6 sm:pb-24 sm:pt-14">
           <p className="eyebrow flex items-center gap-2"><span className="h-px w-5 bg-primary" />Trips</p>

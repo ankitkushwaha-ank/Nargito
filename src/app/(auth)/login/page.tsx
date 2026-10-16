@@ -16,8 +16,8 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const t = await getT();
   return (
     <div>
-      <h1 className="text-2xl">{t("auth.signInTitle")}</h1>
-      <p className="mt-1 text-sm text-muted">{t("auth.signInSubtitle")}</p>
+      <h1 className="text-center text-3xl font-extrabold">{t("auth.signInTitle")}</h1>
+      <p className="mt-1 text-center text-[15px] text-muted">Sign in to continue to Nargito</p>
       <div className="mt-5 space-y-3">
         {sp.reset && <Notice tone="success">Password updated. Sign in with your new password.</Notice>}
         {sp.signedout && <Notice>You have been signed out.</Notice>}
@@ -25,10 +25,8 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       </div>
       <div className="mt-6"><LoginForm next={next} /></div>
       <SocialButtons next={next} />
-      <p className="mt-6 text-center text-sm text-muted">{t("auth.noAccount")} <Link href="/register" className="link font-medium">{t("nav.join")}</Link></p>
-      <p className="mt-6 text-center text-xs text-muted">
-        <Link href="/terms" className="hover:underline">{t("footer.terms")}</Link> · <Link href="/privacy" className="hover:underline">{t("footer.privacy")}</Link>
-      </p>
+      <p className="mt-6 text-center text-sm text-muted lg:hidden">{t("auth.noAccount")} <Link href="/register" className="link font-medium">{t("nav.join")}</Link></p>
+      <p className="mt-5 text-center text-xs text-muted">By continuing, you agree to our <Link href="/terms" className="link">Terms of Service</Link> and <Link href="/privacy" className="link">Privacy Policy</Link>.</p>
     </div>
   );
 }

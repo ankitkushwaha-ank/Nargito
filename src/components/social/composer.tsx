@@ -17,6 +17,7 @@ export function Composer({ user, limits, enabled = { trips: true, products: true
   const t = useT();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [more, setMore] = useState(false);
   const [body, setBody] = useState("");
   const [visibility, setVisibility] = useState(limits.defaultVisibility);
   const [atts, setAtts] = useState<Att[]>([]);
@@ -112,15 +113,15 @@ export function Composer({ user, limits, enabled = { trips: true, products: true
       {ok && !open && <p role="status" className="mt-2 text-sm text-success">{ok}</p>}
 
       {!open && !groupId && (
-        <div className="mt-4 grid grid-cols-3 gap-x-2 gap-y-3">
-          <button type="button" className="quick" onClick={() => { setOpen(true); setTimeout(() => file.current?.click(), 50); }}><span className="quick-ic bg-rose-50 text-rose-500 dark:bg-rose-500/15"><ImagePlus size={22} aria-hidden /></span>{t("composer.photo")}</button>
-          {enabled.trips && <Link href="/my/trips/new" className="quick"><span className="quick-ic bg-blue-50 text-primary dark:bg-primary/15"><Plane size={22} aria-hidden /></span>{t("composer.trip")}</Link>}
-          {enabled.products && <Link href="/my/listings/product/new" className="quick"><span className="quick-ic bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15"><ShoppingBag size={22} aria-hidden /></span>{t("composer.product")}</Link>}
-          {enabled.services && <Link href="/my/listings/service/new" className="quick"><span className="quick-ic bg-orange-50 text-orange-500 dark:bg-orange-500/15"><Wrench size={22} aria-hidden /></span>{t("composer.service")}</Link>}
-          {enabled.companies && <Link href="/my/businesses" className="quick"><span className="quick-ic bg-violet-50 text-violet-600 dark:bg-violet-500/15"><Store size={22} aria-hidden /></span>{t("composer.business")}</Link>}
-          <button type="button" className="quick" onClick={() => setOpen(true)}><span className="quick-ic bg-slate-100 text-slate-500 dark:bg-slate-500/15"><MoreHorizontal size={22} aria-hidden /></span>More</button>
+        <div className="mt-3 grid grid-cols-4 gap-x-1 gap-y-2">
+          <button type="button" className="quick" onClick={() => { setOpen(true); setTimeout(() => file.current?.click(), 50); }}><span className="quick-ic bg-rose-50 text-rose-500 dark:bg-rose-500/15"><ImagePlus size={20} aria-hidden /></span>Post</button>
+          {enabled.trips && <Link href="/my/trips/new" className="quick"><span className="quick-ic bg-blue-50 text-primary dark:bg-primary/15"><Plane size={20} aria-hidden /></span>{t("composer.trip")}</Link>}
+          {enabled.products && <Link href="/my/listings/product/new" className="quick"><span className="quick-ic bg-emerald-50 text-emerald-600 dark:bg-emerald-500/15"><ShoppingBag size={20} aria-hidden /></span>{t("composer.product")}</Link>}
+          <button type="button" className="quick" aria-expanded={more} onClick={() => setMore((m) => !m)}><span className="quick-ic bg-slate-100 text-slate-500 dark:bg-slate-500/15"><MoreHorizontal size={20} aria-hidden /></span>More</button>
+          {more && enabled.services && <Link href="/my/listings/service/new" className="quick"><span className="quick-ic bg-orange-50 text-orange-500 dark:bg-orange-500/15"><Wrench size={20} aria-hidden /></span>{t("composer.service")}</Link>}
+          {more && enabled.companies && <Link href="/my/businesses" className="quick"><span className="quick-ic bg-violet-50 text-violet-600 dark:bg-violet-500/15"><Store size={20} aria-hidden /></span>{t("composer.business")}</Link>}
+          {more && <button type="button" className="quick" onClick={() => { setOpen(true); setPoll(["", ""]); }}><span className="quick-ic bg-cyan-50 text-cyan-600 dark:bg-cyan-500/15"><BarChart3 size={20} aria-hidden /></span>Poll</button>}
         </div>
-      )}
-    </section>
+      )}    </section>
   );
 }

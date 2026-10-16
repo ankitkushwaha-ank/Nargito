@@ -13,7 +13,15 @@ export const BRAND_SLOTS = {
   og: { label: "Share banner (link preview image)", help: "1200 × 630 px works best. This is the picture people see when your link is shared on WhatsApp, Facebook, X, LinkedIn and others.", fallback: "public/images/og-default.jpg", out: "jpg", w: 1200, h: 630, fit: "cover" },
   hero: { label: "Home page banner (desktop)", help: "Wide landscape photo, at least 1600 px wide. The left side should be light or calm so the headline stays readable.", fallback: "public/images/hero-landing.jpg", out: "jpg", w: 2000, h: 900, fit: "inside" },
   "hero-mobile": { label: "Home page banner (mobile)", help: "Landscape or square photo, at least 1000 px wide.", fallback: "public/images/hero-trips.jpg", out: "jpg", w: 1400, h: 1000, fit: "inside" },
-  cover: { label: "Default profile cover", help: "Used on profiles that have not chosen their own cover image. 1600 × 500 px.", fallback: "public/images/hero-trips.jpg", out: "jpg", w: 1600, h: 600, fit: "cover" },
+  "login-banner": { label: "Login & register banner (desktop)", help: "Tall or landscape photo shown on the left of the sign in and register pages. 1400 px or wider.", fallback: "public/images/hero-landing.jpg", out: "jpg", w: 1600, h: 1200, fit: "inside" },
+  "login-banner-mobile": { label: "Login & register banner (mobile)", help: "Shown at the top of sign in and register on phones. Landscape, 1000 px or wider.", fallback: "public/images/hero-trips.jpg", out: "jpg", w: 1400, h: 1000, fit: "inside" },
+  "banner-explore": { label: "Explore page banner", help: "Wide photo, 1600 × 600 px. Shown at the top of Explore.", fallback: "public/images/hero-landing.jpg", out: "jpg", w: 1800, h: 700, fit: "cover" },
+  "banner-marketplace": { label: "Marketplace banner", help: "Wide photo, 1600 × 600 px. Shown at the top of Marketplace (products).", fallback: "public/images/product-festive-cookie-hamper.jpg", out: "jpg", w: 1800, h: 700, fit: "cover" },
+  "banner-trips": { label: "Trips banner", help: "Wide photo, 1600 × 600 px. Shown at the top of Trips.", fallback: "public/images/hero-trips.jpg", out: "jpg", w: 1800, h: 700, fit: "cover" },
+  "banner-services": { label: "Services banner", help: "Wide photo, 1600 × 600 px. Shown at the top of Services.", fallback: "public/images/hero-landing.jpg", out: "jpg", w: 1800, h: 700, fit: "cover" },
+  "banner-shops": { label: "Shops banner", help: "Wide photo, 1600 × 600 px. Shown at the top of Shops.", fallback: "public/images/shop-bakery-cover.jpg", out: "jpg", w: 1800, h: 700, fit: "cover" },
+  "banner-groups": { label: "Groups banner", help: "Wide photo, 1600 × 600 px. Shown at the top of Groups.", fallback: "public/images/hero-trips.jpg", out: "jpg", w: 1800, h: 700, fit: "cover" },
+  "banner-people": { label: "People banner", help: "Wide photo, 1600 × 600 px. Shown at the top of People.", fallback: "public/images/hero-landing.jpg", out: "jpg", w: 1800, h: 700, fit: "cover" },  cover: { label: "Default profile cover", help: "Used on profiles that have not chosen their own cover image. 1600 × 500 px.", fallback: "public/images/hero-trips.jpg", out: "jpg", w: 1600, h: 600, fit: "cover" },
 } as const;
 export type BrandKind = keyof typeof BRAND_SLOTS;
 export const BRAND_KINDS = Object.keys(BRAND_SLOTS) as BrandKind[];

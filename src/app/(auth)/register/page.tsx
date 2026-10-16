@@ -15,8 +15,8 @@ export default async function RegisterPage() {
   const open = await getSetting<boolean>("registration.enabled");
   return (
     <div>
-      <h1 className="text-2xl">{t("auth.registerTitle")}</h1>
-      <p className="mt-1 text-sm text-muted">{t("auth.registerSubtitle")}</p>
+      <h1 className="text-center text-3xl font-extrabold">{t("auth.registerTitle")}</h1>
+      <p className="mt-1 text-center text-[15px] text-muted">{t("auth.registerSubtitle")}</p>
       {!open ? (
         <div className="mt-6"><Notice tone="warn">Registration is currently closed. Please check back later.</Notice></div>
       ) : (

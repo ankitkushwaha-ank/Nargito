@@ -3,7 +3,9 @@ import { desc, eq, and } from "drizzle-orm";
 import { getSessionUser } from "@/server/auth/session";
 import { Container } from "@/components/shell/frames";
 import { FeatureGate } from "@/components/ui/feature-gate";
-import { PageHeader, EmptyState } from "@/components/ui/kit";
+import { EmptyState } from "@/components/ui/kit";
+import { PageBanner } from "@/components/ui/page-banner";
+import { Plane, Store, ShoppingBag, Wrench, UtensilsCrossed, Home, CalendarDays, UserRound } from "lucide-react";
 import { CardGrid, ListingCard } from "@/components/ui/listing-card";
 import { SearchBox } from "@/components/shell/search-box";
 import { useDb, schema } from "@/server/db";
@@ -34,8 +36,13 @@ export default async function Explore() {
   return (
     <FeatureGate feature="search">
       <Container width="max-w-6xl">
-        <PageHeader title="Explore" description="What's new across Nargito." />
-        <SearchBox className="mb-6 max-w-xl" />
+        <PageBanner kind="banner-explore" eyebrow="Explore" title="Discover New" accent="Experiences" description="Find trips, local shops, products, services and amazing people around you."><SearchBox className="max-w-md" /></PageBanner>
+        <nav aria-label="Categories" className="no-scrollbar -mx-1 mb-7 flex gap-3 overflow-x-auto px-1 pb-1 sm:justify-between">
+          {[["/trips", "Trips", Plane, "bg-blue-100 text-primary"], ["/shops", "Shops", Store, "bg-emerald-100 text-emerald-600"], ["/products", "Products", ShoppingBag, "bg-violet-100 text-violet-600"], ["/services", "Services", Wrench, "bg-indigo-100 text-indigo-600"], ["/search?q=food", "Food & Drinks", UtensilsCrossed, "bg-orange-100 text-orange-500"], ["/search?q=stay", "Stays", Home, "bg-sky-100 text-sky-600"], ["/groups", "Events", CalendarDays, "bg-pink-100 text-pink-500"], ["/people", "People", UserRound, "bg-rose-100 text-rose-500"]].map(([href, label, Icon, tone]) => {
+            const I = Icon as typeof Plane;
+            return <Link key={href as string} href={href as string} className="flex w-[74px] shrink-0 flex-col items-center gap-1.5 text-center text-xs font-semibold"><span className={`flex h-14 w-14 items-center justify-center rounded-full ${tone as string}`}><I size={24} aria-hidden /></span>{label as string}</Link>;
+          })}
+        </nav>
         {nothing && <EmptyState title="Nothing to explore yet" description="Content will appear as members publish." />}
         <Section title="Upcoming trips" href="/trips" empty={!trips.length}><CardGrid>{trips.map((t) => <ListingCard key={t.id} href={`/trips/${t.id}`} title={t.title} subtitle={t.destination} image={t.coverUrl} badge={t.category} meta={t.startDate ? formatDate(t.startDate, locale) : undefined} />)}</CardGrid></Section>
         <Section title="Shops" href="/shops" empty={!shops.length}><CardGrid>{shops.map((s) => <ListingCard key={s.id} href={`/shops/${s.slug}`} title={s.name} subtitle={s.description?.slice(0, 90)} image={s.logoUrl ?? s.coverUrl} badge={s.category} verified={s.verified} meta={s.locationLabel} ratio="aspect-[16/9]" />)}</CardGrid></Section>

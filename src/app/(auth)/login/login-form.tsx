@@ -16,11 +16,11 @@ export function LoginForm({ next }: { next?: string }) {
   return (
     <ActionForm action={loginAction} className="space-y-4">
       <input type="hidden" name="next" value={next ?? ""} />
-      <Field label={t("auth.email")} name="email" type="email" required autoComplete="email" />
-      <Field label={t("auth.password")} name="password" type="password" required autoComplete="current-password" />
+      <Field label={t("auth.email")} name="email" type="email" required autoComplete="email" placeholder="you@example.com" />
+      <Field label={t("auth.password")} name="password" type="password" required autoComplete="current-password" placeholder="Enter your password" />
       <MfaField />
       <div className="flex justify-end"><Link href="/forgot-password" className="link text-sm">{t("auth.forgot")}</Link></div>
-      <SubmitButton className="w-full" pendingLabel={t("common.loading")}>{t("auth.signInButton")}</SubmitButton>
+      <SubmitButton className="w-full !min-h-[50px] text-base" pendingLabel={t("common.loading")}>{t("auth.signInButton")}</SubmitButton>
     </ActionForm>
   );
 }

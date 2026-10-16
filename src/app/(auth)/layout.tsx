@@ -1,40 +1,45 @@
-import Link from "next/link";
-import { Globe2, MapPinned, MessagesSquare, ShieldCheck } from "lucide-react";
+﻿import Link from "next/link";
+import { Compass, Store, Plane } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { ThemeToggle } from "@/components/shell/prefs-switchers";
-import { getT } from "@/i18n/server";
+import { AuthSwitch } from "./auth-switch";
 
-export default async function AuthLayout({ children }: { children: React.ReactNode }) {
-  const t = await getT();
-  const points = [[Globe2, "Share trips and meet fellow travellers"], [MapPinned, "Discover shops and services nearby"], [MessagesSquare, "Chat with sellers about the exact listing"], [ShieldCheck, "Approximate location only. Your privacy first."]] as const;
+const POINTS = [[Plane, "Find travel companions"], [Store, "Discover local shops & services"], [Compass, "Share your trips and experiences"]] as const;
+
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="grid min-h-screen lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
-      {/* desktop artwork panel */}
-      <aside className="relative hidden flex-col justify-between overflow-hidden p-10 lg:flex">
+    <div className="min-h-screen bg-gradient-to-br from-white via-[#f5f8ff] to-[#e8efff] lg:flex dark:from-bg dark:via-bg dark:to-bg">
+      {/* desktop: photo panel with headline */}
+      <aside className="relative hidden w-[52%] max-w-[860px] shrink-0 overflow-hidden rounded-r-[4.5rem] lg:block">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/api/brand/hero" alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover object-[78%_center]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/55 to-transparent" aria-hidden />
-        <div className="relative"><Logo size={46} /></div>
-        <div className="relative max-w-md text-slate-900">
-          <h2 className="text-4xl font-extrabold leading-tight">Real People.<br /><span className="text-primary">Real Places.</span></h2>
-          <p className="mt-3 text-lg text-slate-600">{t("landing.heroSubtitle")}</p>
-          <ul className="mt-8 grid gap-2.5 text-sm font-medium">
-            {points.map(([Icon, text]) => <li key={text} className="flex items-center gap-3 rounded-2xl bg-white/80 px-4 py-3 shadow-sm ring-1 ring-black/5 backdrop-blur"><Icon size={18} className="text-primary" aria-hidden />{text}</li>)}
+        <img src="/api/brand/login-banner" alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover object-[60%_center]" fetchPriority="high" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/85 via-white/35 to-transparent" aria-hidden />
+        <div className="relative flex h-full min-h-screen flex-col p-10 xl:p-14">
+          <Logo size={44} />
+          <h2 className="mt-16 max-w-[460px] text-[2.6rem] font-extrabold leading-[1.1] tracking-tight text-slate-900 xl:text-5xl">People, journeys and local businesses — <span className="text-primary">all in one place.</span></h2>
+          <p className="mt-5 max-w-md text-lg leading-relaxed text-slate-600">Connect with travellers, explore amazing places, discover local businesses and share your own experiences.</p>
+          <ul className="mt-7 space-y-3">
+            {POINTS.map(([Icon, text]) => <li key={text} className="flex items-center gap-3 font-medium text-slate-800"><span className="flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-md"><Icon size={20} className="text-primary" aria-hidden /></span>{text}</li>)}
           </ul>
         </div>
-        <p className="relative text-xs text-slate-600">© {new Date().getFullYear()} Nargito</p>
       </aside>
 
-      <div className="flex min-h-screen flex-col bg-bg">
-        {/* mobile banner */}
-        <div className="relative h-40 overflow-hidden lg:hidden">
+      <div className="flex min-h-screen min-w-0 flex-1 flex-col">
+        {/* mobile: banner with brand + tagline */}
+        <div className="relative h-56 shrink-0 overflow-hidden lg:hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/api/brand/hero-mobile" alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover object-[75%_40%]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/85 via-white/30 to-transparent" aria-hidden />
-          <div className="relative flex items-center justify-between px-4 pt-4"><Logo size={38} /><ThemeToggle /></div>
+          <img src="/api/brand/login-banner-mobile" alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover object-[70%_40%]" fetchPriority="high" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/50 to-transparent" aria-hidden />
+          <div className="relative flex flex-col items-center gap-2 px-4 pt-5 text-center">
+            <div className="flex w-full items-center justify-end"><ThemeToggle /></div>
+            <div className="-mt-9"><Logo size={44} /></div>
+            <p className="text-sm font-medium text-slate-700">People · Trips · Local Businesses<br />All in one place.</p>
+          </div>
         </div>
-        <main id="main" className="relative z-10 -mt-8 flex flex-1 flex-col items-center px-4 pb-10 lg:mt-0 lg:justify-center lg:px-10">
-          <div className="w-full max-w-md rounded-3xl border border-line bg-surface p-6 shadow-xl sm:p-8 lg:shadow-lg">{children}</div>
+
+        <div className="hidden items-center justify-end px-10 pt-6 lg:flex"><AuthSwitch /></div>
+        <main id="main" className="relative z-10 -mt-12 flex flex-1 flex-col items-center rounded-t-[2.25rem] bg-surface px-5 pb-10 pt-8 shadow-[0_-12px_30px_rgba(18,80,245,0.08)] lg:mt-0 lg:justify-center lg:rounded-none lg:bg-transparent lg:px-10 lg:pt-4 lg:shadow-none">
+          <div className="w-full max-w-[460px] lg:rounded-3xl lg:border lg:border-line lg:bg-surface lg:p-9 lg:shadow-xl">{children}</div>
           <p className="mt-6 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-muted"><Link href="/terms" className="hover:text-primary">Terms</Link><Link href="/privacy" className="hover:text-primary">Privacy</Link><Link href="/help" className="hover:text-primary">Help</Link><Link href="/" className="hover:text-primary">Back to home</Link></p>
         </main>
       </div>

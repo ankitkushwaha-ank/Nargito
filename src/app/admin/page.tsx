@@ -7,7 +7,7 @@ import { AdminTitle, MetricCard, SectionHeading, TrendChart } from "@/components
 import { cn } from "@/lib/cn";
 import { ErrorState } from "@/components/ui/kit";
 import { AdminOptionGrid } from "@/components/admin/option-grid";
-import { visibleAdminGroups } from "@/server/admin-nav";
+import { visibleAdminGroups, adminTileCounts } from "@/server/admin-nav";
 
 export const metadata = { title: "Dashboard" };
 
@@ -29,7 +29,7 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
   try { data = await getDashboard(days); } catch { return <ErrorState title="Dashboard unavailable" description="Metrics could not be loaded from the database." action={<Link href="/admin" className="btn-secondary mt-2">Retry</Link>} />; }
   const by = new Map<string, Metric>(data.metrics.map((m) => [m.key, m]));
   const pick = (keys: string[]) => keys.map((k) => by.get(k)).filter(Boolean) as Metric[];
-  const navGroups = await visibleAdminGroups(user.id);
+  const [navGroups, tileCounts] = await Promise.all([visibleAdminGroups(user.id), adminTileCounts()]);
   const attention = pick(ATTENTION);
   const allClear = attention.every((m) => !m.value);
   const grid = "grid gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4";
@@ -46,7 +46,7 @@ export default async function AdminDashboard({ searchParams }: { searchParams: P
         <TrendChart title="Posts per day" subtitle={`Last ${days} days`} data={data.postsSeries} color="14 165 233" />
       </div>
 
-      <AdminOptionGrid groups={navGroups} />
+      <AdminOptionGrid groups={navGroups} counts={tileCounts} />
 
       <SectionHeading title="At a glance" />
       <div className={grid}>{pick(GLANCE).map((m) => <MetricCard key={m.key} m={m} />)}</div>

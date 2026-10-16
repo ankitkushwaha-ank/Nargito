@@ -86,7 +86,7 @@ async function main() {
     console.log(`Created super administrator ${adminEmail}${generated ? ` with generated password: ${generated}` : " (password from SEED_ADMIN_PASSWORD)"}`);
   }
 
-  const wantSample = process.env.NODE_ENV !== "production" || process.env.SEED_SAMPLE === "1";
+  const wantSample = process.env.SEED_SAMPLE !== "0"; // demo content is on by default; set SEED_SAMPLE=0 for a clean production database
   const [{ n: sampleCount }] = await db.select({ n: sql<number>`count(*)::int` }).from(schema.users).where(eq(schema.users.isSeed, true));
   if (wantSample && sampleCount === 0) {
     await seedDemo(db);
