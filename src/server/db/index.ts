@@ -25,6 +25,11 @@ async function create(): Promise<Db> {
     const pool = new Pool({
       connectionString: cleanUrl,
       max: Number(process.env.DATABASE_POOL_MAX ?? 10),
+      // keep warm connections: a new TLS handshake to a remote database costs 200-500 ms per request
+      idleTimeoutMillis: 300_000,
+      keepAlive: true,
+      keepAliveInitialDelayMillis: 10_000,
+      connectionTimeoutMillis: 10_000,
       ssl: wantsSsl ? (ca ? { ca, rejectUnauthorized: true } : { rejectUnauthorized: false }) : false,
     });
     return drizzle(pool, { schema }) as Db;
