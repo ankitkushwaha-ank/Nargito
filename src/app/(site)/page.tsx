@@ -59,8 +59,9 @@ export default async function Landing() {
         <img src="/api/brand/hero" alt="" aria-hidden className="absolute inset-0 -z-10 hidden h-full w-full object-cover object-[75%_center] md:block" fetchPriority="high" />
         {/* mobile artwork: photo behind the text, fading to white at the top */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/api/brand/hero-mobile" alt="" aria-hidden className="absolute inset-0 -z-10 h-full w-full object-cover object-[72%_bottom] md:hidden" fetchPriority="high" />
-        <div className="absolute inset-x-0 top-0 -z-10 h-[62%] bg-gradient-to-b from-white via-white/80 to-transparent md:hidden" aria-hidden />
+        <img src="/api/brand/hero-mobile" alt="" aria-hidden className="absolute inset-0 -z-10 h-full w-full object-cover object-[72%_bottom] opacity-90 saturate-[.85] md:hidden" fetchPriority="high" />
+        <div className="absolute inset-x-0 top-0 -z-10 h-[70%] bg-gradient-to-b from-white via-white/85 to-transparent md:hidden" aria-hidden />
+        <div className="absolute inset-x-0 bottom-0 -z-10 h-28 bg-gradient-to-t from-bg to-transparent md:hidden" aria-hidden />
         <div className="mx-auto max-w-shell px-4 pb-24 pt-6 sm:px-6 md:pb-32 md:pt-14 lg:pt-16">
           {/* mobile copy */}
           <div className="md:hidden">

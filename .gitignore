@@ -10,7 +10,7 @@ test-results
 .DS_Store
 Thumbs.db
 desktop.ini
-.data
-
+.data/*
+!.data/uploads/
 # generated SQL dump (contains demo password hashes)
 database/*.sql

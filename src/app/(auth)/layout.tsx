@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { Compass, Store, Plane } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { ThemeToggle } from "@/components/shell/prefs-switchers";
@@ -28,7 +28,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         {/* mobile: banner with brand + tagline */}
         <div className="relative h-56 shrink-0 overflow-hidden lg:hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/api/brand/login-banner-mobile" alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover object-[70%_40%]" fetchPriority="high" />
+          <img src="/api/brand/login-banner-mobile" alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover object-[70%_40%] opacity-90 saturate-[.85]" fetchPriority="high" />
           <div className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/50 to-transparent" aria-hidden />
           <div className="relative flex flex-col items-center gap-2 px-4 pt-5 text-center">
             <div className="flex w-full items-center justify-end"><ThemeToggle /></div>

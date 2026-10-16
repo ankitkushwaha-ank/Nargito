@@ -143,7 +143,7 @@ export const SETTINGS: SettingDef[] = [
   S("design.primaryHover", "design", "Primary hover color", "color", "#0A3ED2"),
   S("design.tint", "design", "Light tint", "color", "#EBF1FF"),
   S("design.radius", "design", "Corner radius (px)", "number", 16, { min: 0, max: 24 }),
-  S("design.defaultTheme", "design", "Default theme", "select", "system", { options: ["light", "dark", "system"] }),
+  S("design.defaultTheme", "design", "Default theme", "select", "light", { options: ["light", "dark", "system"] }),
   S("design.customCss", "design", "Custom CSS (sanitised, no @import/url())", "text", "", { sensitive: true }),
 
   S("seo.titleTemplate", "seo", "Title template", "string", "%s | Nargito"),
