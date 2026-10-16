@@ -39,7 +39,7 @@ export async function seedDemo(db: Db) {
     const [u] = await db.insert(schema.users).values({
       email, username, displayName, headline, locationLabel: loc, passwordHash: pw, emailVerifiedAt: new Date(), onboardingDone: true, isSeed: true,
       bio: `${displayName} on Nargito. Sharing ${headline.toLowerCase()}.`, skills: ["Travel", "Community", "Photography"].slice(0, 2 + (username.length % 2)),
-      coverUrl: cover ? `/art/${cover}.jpg` : null, verified: ["aarav_sharma", "rohan_mehta", "kabir_singh"].includes(username), lastSeenAt: ago(username.length % 5),
+      coverUrl: null, verified: ["aarav_sharma", "rohan_mehta", "kabir_singh"].includes(username), lastSeenAt: ago(username.length % 5),
     }).returning({ id: schema.users.id });
     U[username] = u!.id;
   }

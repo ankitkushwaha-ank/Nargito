@@ -103,7 +103,7 @@ export default async function ProfilePage({ params, searchParams }: { params: Pr
         <section className="card overflow-hidden">
           <div className="relative h-36 sm:h-52 lg:h-64">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={u.coverUrl && full ? u.coverUrl : "/api/brand/cover"} data-zoom={u.coverUrl && full ? u.coverUrl : "/api/brand/cover"} alt="" className="h-full w-full cursor-zoom-in object-cover" />
+            <img src={(u.coverUrl && full && !u.coverUrl.startsWith("/art/") ? u.coverUrl : "/api/brand/cover")} data-zoom={(u.coverUrl && full && !u.coverUrl.startsWith("/art/") ? u.coverUrl : "/api/brand/cover")} alt="" className="h-full w-full cursor-zoom-in object-cover" />
             {self && <Link href="/settings/profile" className="absolute right-4 top-4 inline-flex items-center gap-2 rounded-xl bg-black/55 px-3.5 py-2 text-sm font-semibold text-white backdrop-blur hover:bg-black/70"><Camera size={16} aria-hidden />Edit cover</Link>}
           </div>
           <div className="px-4 pb-5 sm:px-7">
