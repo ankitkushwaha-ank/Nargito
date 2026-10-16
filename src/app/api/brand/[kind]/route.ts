@@ -14,7 +14,7 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ kind: stri
     const etag = `"${Math.round(mtime)}-${data.length}"`;
     if (_req.headers.get("if-none-match") === etag) return new NextResponse(null, { status: 304, headers: { ETag: etag, "Cache-Control": "public, max-age=0, must-revalidate" } });
     const type = file.endsWith(".png") ? "image/png" : "image/jpeg";
-    return new NextResponse(new Uint8Array(data), { headers: { "Content-Type": type, "Cache-Control": "public, max-age=0, must-revalidate", ETag: etag } });
+    return new NextResponse(new Uint8Array(data), { headers: { "Content-Type": type, "Cache-Control": "public, max-age=120, stale-while-revalidate=86400", ETag: etag } });
   } catch {
     // Hosts that do not ship the public/ folder next to the server (serverless, standalone): send the browser to the static copy.
     const url = "/" + BRAND_SLOTS[kind].fallback.replace(/^public\//, "");

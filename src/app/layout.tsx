@@ -4,7 +4,7 @@ import "./globals.css";
 import { getSettings } from "@/server/settings";
 import { getLocale, getMessages } from "@/i18n/server";
 import { I18nProvider } from "@/i18n/client";
-import { Splash } from "@/components/brand/splash";
+
 import { getSessionUser } from "@/server/auth/session";
 import { hasPermission } from "@/server/auth/guard";
 import { ServiceWorkerRegister } from "@/components/pwa/sw-register";
@@ -68,7 +68,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <style dangerouslySetInnerHTML={{ __html: `${tokens}.no-splash #splash{display:none}${customCss}` }} />
       </head>
       <body>
-        <Splash />
+        
         <I18nProvider locale={locale} messages={messages}>
           {maintenance ? (
             <main className="flex min-h-screen flex-col items-center justify-center gap-6 px-6 text-center">
