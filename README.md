@@ -139,3 +139,4 @@ Open an issue or a pull request. Run `npm run typecheck` before pushing.
 ## License
 
 Private project. All rights reserved unless the owner states otherwise.
+
